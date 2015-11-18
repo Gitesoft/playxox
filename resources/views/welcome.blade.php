@@ -38,8 +38,8 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Coming Soon/div>
-                    <p>Gitesoft</p>
+                <div class="title">Coming Soon</div>
+                    <p><small>Gitesoft</small></p>
             </div>
         </div>
     </body>
