@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
     //
-    public function makeMover(PlayerInterface $player, $target) {
+    public function makeMove(PlayerInterface $player, $target) {
 
     }
 }
