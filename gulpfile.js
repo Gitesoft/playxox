@@ -11,6 +11,15 @@ var elixir = require('laravel-elixir');
  |
  */
 
-elixir(function(mix) {
-    mix.sass('app.scss');
+elixir(function (mix) {
+  //mix.sass('app.scss');
+
+  mix.scripts([
+    '../../../vendor/bower_components/angular/angular.min.js',
+    '../../../vendor/bower_components/angular-socket-io/socket.min.js'
+  ], 'public/js/vendor.js')
+
+    .version([
+      'public/js/vendor.js'
+    ]);
 });
