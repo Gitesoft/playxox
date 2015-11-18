@@ -13,10 +13,13 @@ var elixir = require('laravel-elixir');
 
 elixir(function (mix) {
   //mix.sass('app.scss');
+  //
+  var bowerPath = '../../../vendor/bower_components/';
 
   mix.scripts([
-    '../../../vendor/bower_components/angular/angular.min.js',
-    '../../../vendor/bower_components/angular-socket-io/socket.min.js'
+    bowerPath + 'angular/angular.min.js',
+    bowerPath + 'angular-socket-io/socket.min.js'
+    
   ], 'public/js/vendor.js')
 
     .version([
