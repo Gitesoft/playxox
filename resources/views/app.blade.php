@@ -10,5 +10,6 @@
         </div>
 
         <script type="text/javascript" src="{{ elixir('vendor.js') }}"></script>
+        <script type="text/javascript" src="{{ elixir('app.js') }}"></script>
     </body>
 </html>

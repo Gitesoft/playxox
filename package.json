@@ -1,11 +1,13 @@
 {
   "private": true,
   "devDependencies": {
+    "babel": "^6.1.18",
     "gulp": "^3.8.8"
   },
   "dependencies": {
     "bootstrap-sass": "^3.0.0",
     "laravel-elixir": "^3.0.0",
-    "socket.io": "^1.3.7"
+    "socket.io": "^1.3.7",
+    "laravel-elixir-babel": "^0.2.0"
   }
 }

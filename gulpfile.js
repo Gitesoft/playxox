@@ -21,6 +21,8 @@ elixir(function (mix) {
   mix
   	.copy('vendor/bower_components/bootstrap/dist/fonts', 'public/fonts')
   	.copy('vendor/bower_components/font-awesome/fonts', 'public/fonts')
+
+	.babel('app.js')
   	//
   	.styles([
   		bowerPath + 'bootstrap/dist/css/bootstrap.css',
@@ -36,6 +38,7 @@ elixir(function (mix) {
 
 	.version([
 	  'vendor.css',
-	  'vendor.js'
+	  'vendor.js',
+	  'js/app.js'
 	]);
 });
