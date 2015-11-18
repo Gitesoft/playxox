@@ -1,0 +1,20 @@
+{
+  "name": "playxox",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Team"
+  ],
+  "license": "MIT",
+  "homepage": "http://playxox.com",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower_components",
+    "test",
+    "tests"
+  ]
+}
