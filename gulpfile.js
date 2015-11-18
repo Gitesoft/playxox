@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 
+elixir.config.sourcemaps = false;
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -16,13 +18,24 @@ elixir(function (mix) {
   //
   var bowerPath = '../../../vendor/bower_components/';
 
-  mix.scripts([
-    bowerPath + 'angular/angular.min.js',
-    bowerPath + 'angular-socket-io/socket.min.js'
-    
-  ], 'public/js/vendor.js')
+  mix
+  	.copy('vendor/bower_components/bootstrap/dist/fonts', 'public/fonts')
+  	.copy('vendor/bower_components/font-awesome/fonts', 'public/fonts')
+  	//
+  	.styles([
+  		bowerPath + 'bootstrap/dist/css/bootstrap.css',
+  		bowerPath + 'font-awesome/css/font-awesome.css'
+  		//
+  	], 'public/vendor.css')
+  	//
+  	.scripts([
+	    bowerPath + 'angular/angular.js',
+	    bowerPath + 'angular-socket-io/socket.js'
 
-    .version([
-      'public/js/vendor.js'
-    ]);
+	  ], 'public/vendor.js')
+
+	.version([
+	  'vendor.css',
+	  'vendor.js'
+	]);
 });

@@ -19,6 +19,8 @@
   ],
   "dependencies": {
     "angular": "~1.4.7",
-    "angular-socket-io": "~0.7.0"
+    "angular-socket-io": "~0.7.0",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0"
   }
 }
