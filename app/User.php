@@ -59,17 +59,6 @@ class User extends Model implements AuthenticatableContract,
         return JWTAuth::fromUser($this);
     }
 
-    /**
-     * Playerable Interface
-     */
-    public function takeTurn(Game $game) {
-
-    }
-
-    public function makeMove(Game $game) {
-
-    }
-
     public function getPlayerId() {
         return $this->attributes['id'];
     }
