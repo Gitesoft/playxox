@@ -19,9 +19,17 @@
         url: "{{ url() }}"
     };
 
-    var socket = io(XoxConfig.url + '3000');
+    var user_id = (new Date()).getTime();
 
-    socket.on('game-f3495h34h39', function(payload) {
+    var socket = io(XoxConfig.url + ':3000',{ query: "user_id=" + user_id });
+
+
+    socket.emit('joinlobby',{
+        type: 'random'
+    });
+
+    socket.on('private-' + user_id, function(payload) {
+        console.log('message from private channel');
         console.log(payload);
         document.getElementById('message').innerText = payload.message;
     });

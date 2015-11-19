@@ -1,4 +1,4 @@
-xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', function ($scope, locker, $location, $routeParams) {
+xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams','api', function ($scope, locker, $location, $routeParams,api) {
 
     //login check
     if (locker.get('token') === undefined) {
