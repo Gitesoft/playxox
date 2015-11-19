@@ -1,6 +1,6 @@
 ## API Docs
 
-POST - /api/register (nickname)
+### POST - /api/register (nickname)
 
 ** Success Response **
 
@@ -19,3 +19,24 @@ POST - /api/register (nickname)
 	{
 		"error": "This nickname is already acquired"
 	}
+	
+	
+### GET - /api/scores/top_players
+
+** Success Response **
+
+	[
+		{"nickname": "aozisik", "total_score": 5 },
+		{"nickname": "ilterocal", "total_score": 4 },
+		{"nickname": "samet", "total_score": 3 }
+	]
+	
+### GET - /api/scores/top_countries
+
+** Success Response **
+
+	[
+		{"name": "Turkey", "score": 232 },
+		{"name": "England", "score": 120 },
+		{"name": "Germany", "score": 50 }
+	]
