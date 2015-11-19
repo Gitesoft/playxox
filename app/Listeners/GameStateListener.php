@@ -27,6 +27,8 @@ class GameStateListener
     public function handle(GameMove $event)
     {
         //
+        if(is_string($event->game->turn)) {
 
+        }
     }
 }

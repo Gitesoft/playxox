@@ -16,15 +16,20 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
         $scope.updateGame = function (game) {
             $scope.game = game.state;
 
-            if (game.players[0].id == api.me.id) {
-                $scope.char = game.players[0].char;
-                $scope.me = game.players[0];
-                $scope.opponent = game.players[1];
+            var keys = Object.keys(game.players);
+
+            var p1 = keys[0];
+            var p2 = keys[1];
+
+            if (game.players[p1].id == api.me.id) {
+                $scope.char = game.players[p1].char;
+                $scope.me = game.players[p1];
+                $scope.opponent = game.players[p2];
             }
             else {
-                $scope.char = game.players[1].char;
-                $scope.me = game.players[1];
-                $scope.opponent = game.players[0];
+                $scope.char = game.players[p2].char;
+                $scope.me = game.players[p2];
+                $scope.opponent = game.players[p1];
             }
 
             if (game.turn == api.me.id)

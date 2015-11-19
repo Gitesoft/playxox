@@ -66,4 +66,9 @@ class User extends Model implements AuthenticatableContract,
     public function getPlayerNick() {
         return $this->attributes['nickname'];
     }
+
+    public function takeTurn(Game $game)
+    {
+        // TODO: Implement takeTurn() method.
+    }
 }
