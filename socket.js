@@ -23,13 +23,9 @@ var addUserToLobby = function (user) {
 };
 
 var removeUserFromLobby = function (user) {
-    for (id in lobby) {
-        if (id === user.id) {
-            var index = lobby.indexOf(lobby[id]);
-            lobby.splice(index, 1);
-            redis.set('lobby', JSON.stringify(lobby));
-        }
-    }
+    console.log(lobby);
+    delete lobby[user.id];
+    redis.set('lobby', JSON.stringify(lobby));
 }
 
 var printLobby = function () {
@@ -54,6 +50,9 @@ io.on('connection', function (socket) {
 
     socket.on('joinlobby', function (data) {
 
+        if (user_id === undefined)
+            return;
+
         console.log('joined to lobby | user:' + user_id + ',type:' + data.type);
 
         var user = {
@@ -62,10 +61,14 @@ io.on('connection', function (socket) {
         };
         addUserToLobby(user);
 
-        printLobby();
+        //printLobby();
     });
 
     socket.on('disconnect', function () {
+        removeUserFromLobby({id: user_id});
+
+        //printLobby();
+
         console.log("disconnected");
     });
 });

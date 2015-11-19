@@ -12,6 +12,7 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
     }
 
     $scope.doLogout = function () {
+        api.destroySocket();
         //wipe local storage
         locker.pull('me');
         api.me = undefined;
