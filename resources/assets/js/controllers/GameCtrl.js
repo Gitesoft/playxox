@@ -72,7 +72,10 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
 
         $scope.updateGame(api.game);
 
+        console.log("game-" + api.game.id);
         api.socket.on("game-" + api.game.id, function (data) {
+            console.log("event fired");
+            console.log(data);
             $scope.updateGame(data);
         });
 
