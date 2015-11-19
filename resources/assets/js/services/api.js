@@ -15,10 +15,7 @@
         this.gameListenChannel = null;
 
         this.updateGame = function (game) {
-
-            if (self.game === null)
-                $location.path('/game/' + game.id);
-
+            this.broadcast('startgame', game);
             self.game = game;
         };
 
@@ -38,7 +35,6 @@
         this.joinLobby = function () {
             self.inLobby = true;
             self.socket.on(self.gameListenChannel, function (data) {
-                console.log(data);
                 self.updateGame(data);
             });
         };

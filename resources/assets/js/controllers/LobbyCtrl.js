@@ -62,4 +62,12 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         //redirect to home
         $location.path('');
     };
+
+    $scope.$on('startgame', function (event, game) {
+        console.log('startgame event fired, go to: ' + '/game/' + game.id);
+        $scope.$apply(function () {
+            $location.path('/game/' + game.id);
+        });
+
+    });
 }]);
