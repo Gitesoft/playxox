@@ -11,4 +11,12 @@ class MinimaxAI implements PlayerInterface
     {
         // TODO: Implement takeTurn() method.
     }
+
+    public function getPlayerId() {
+        return MinimaxAI::class;
+    }
+
+    public function getPlayerNick() {
+        return 'Gite Bot';
+    }
 }
