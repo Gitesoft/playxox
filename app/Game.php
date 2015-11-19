@@ -29,9 +29,101 @@ class Game extends Model
 
     //
     public function makeMove(PlayerInterface $player, $target) {
+        //
+        $state = $this->state;
+        $target = explode(',', $target);
 
+        if( ! $target || ! is_array($target)) {
+            throw new MoveException('Invalid move');
+        }
 
+        $row = intval($target[0]);
+        $column = intval($target[1]);
 
+        if(($row < 0 or $row > 2) or ($column < 0 or $column > 2)) {
+            throw new MoveException('Invalid move');
+        }
+
+        if( ! is_null($this->state[$row][$column])) {
+            throw new MoveException('Target already occupied');
+        }
+
+        if($this->turn != $player->getPlayerId()) {
+            throw new MoveException('It is not your turn');
+        }
+
+        $char = $this->players[$player->getPlayerId()]['char'];
+        $state[$row][$column] = $char;
+
+        // is won?
+        if($this->isWon($this->state, $char)) {
+            $this->winner = $player->getPlayerId();
+        }
+
+        $this->state = $state;
+
+        $players = $this->players;
+        unset($players[$player->getPlayerId()]);
+        $next = array_shift($players);
+
+        $this->turn = $next['id'];
+        $this->save();
+    }
+
+    private function checkColums(array $columns, $char) {
+        $equal = true;
+        $prev = null;
+
+        foreach($columns as $col) {
+            //
+            if($col != $char) {
+                $equal = false;
+            }
+
+            if( ! is_null($prev) && $prev != $col) {
+                $equal = false;
+            }
+
+            $prev = $col;
+        }
+
+        return $equal;
+    }
+
+    private function isWon(array $state, $char) {
+
+        // check columns horizontally
+        foreach($state as $row) {
+            //
+            if($this->checkColums($row, $char)) {
+                return true;
+            }
+        }
+
+        // check columns vertically
+        for($cIndex=0;$cIndex<=2;$cIndex++) {
+
+            $columns = [];
+
+            for($rIndex=0;$rIndex<=2;$rIndex++) {
+                $columns[] = $state[$rIndex][$cIndex];
+            }
+
+            if($this->checkColums($columns, $char)) {
+                return true;
+            }
+        }
+
+        // check columns diagonally
+        if($this->checkColums([$state[0][0], $state[1][1], $state[2][2]], $char)) {
+            return true;
+        }
+
+        if($this->checkColums([$state[0][2], $state[1][1], $state[2][0]], $char)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function setStateAttribute(array $state) {
@@ -66,8 +158,8 @@ class Game extends Model
         $p2 = Game::inflatePlayerFromId($this->attributes['player2']);
 
         return [
-            Game::playerArray($p1, 'X'),
-            Game::playerArray($p2, 'O'),
+            $p1->getPlayerId() => Game::playerArray($p1, 'X'),
+            $p2->getPlayerId() => Game::playerArray($p2, 'O'),
         ];
     }
 }
