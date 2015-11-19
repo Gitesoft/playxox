@@ -60,7 +60,7 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
 
             var target = i + ',' + j;
             var options = {
-                'url': 'game/' + $scope.game.id + '/move',
+                'url': 'game/' + api.game.id + '/move',
                 'params': {
                     token: api.me.token,
                     target: target
