@@ -25,9 +25,7 @@ class ClientRequest extends Request
     public function rules()
     {
         return [
-            'site' => 'required|url',
-            'key' => 'required',
-            'redirect' => 'url'
+            'nickname' => 'required'
         ];
     }
 }

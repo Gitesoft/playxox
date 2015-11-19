@@ -48,9 +48,6 @@ class User extends Model implements AuthenticatableContract,
     //
 
 
-
-
-
     public function takeTurn(Game $game) {
 
     }
