@@ -4,6 +4,8 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', '$timeout',
         $location.path('/login');
     } else {
 
+        $scope.api = api;
+
         api.gameListenChannel = 'private-' + api.me.id;
 
         $scope.joinLobby = function (type) {
