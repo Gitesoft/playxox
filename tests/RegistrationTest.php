@@ -39,14 +39,17 @@ class RegistrationTest extends TestCase
 
     public function testSuccessfulRegistration() {
         // Valid nickname
-        $this->post('/api/register', ['nickname' => 'aozisik'])->assertResponseOk();
+        $post = $this->post('/api/register', ['nickname' => 'aozisik']);
+
+        $post->assertResponseOk();
+        $post->seeJson(['nickname' => 'aozisik']);
     }
 
     public function testUserRegistration()
     {
         // Valid nickname
         $this->post('/api/register', ['nickname' => 'aozisik'])->assertResponseOk();
-        // Invalid (non-unique) nickname
+        // Invaliod (non-unique) nickname
         $this->post('/api/register', ['nickname' => 'aozisik'])->assertResponseStatus(422);
     }
 }

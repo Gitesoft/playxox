@@ -11,6 +11,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use JWTAuth;
+
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract,
@@ -45,6 +47,8 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    protected $appends = ['token'];
+
     //
 
 
@@ -54,5 +58,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function makeMove(Game $game) {
 
+    }
+
+    public function getTokenAttribute() {
+        return JWTAuth::fromUser($this);
     }
 }

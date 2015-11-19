@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
-class ClientRequest extends Request
+class PlayerRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,6 +14,7 @@ class ClientRequest extends Request
     {
         return true;
     }
+
     public function wantsJson() {
         return true;
     }
@@ -25,7 +26,7 @@ class ClientRequest extends Request
     public function rules()
     {
         return [
-            'nickname' => 'required'
+            'nickname' => 'required|unique:users,nickname|regex:/^[a-z\d_-]{3,15}$/i'
         ];
     }
 }
