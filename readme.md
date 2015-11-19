@@ -8,7 +8,7 @@
 
 ## Data Structures and Events
 
-### Client -> Server
+### Client -> API
 
 **joinLobby**
 
@@ -16,8 +16,7 @@
 		type: "random" // other options: computer, friend
 	}
 
-
-### Server -> Client
+### Redis Server -> Client
 
 **joinGame**
 
