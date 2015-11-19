@@ -26,7 +26,7 @@ class RegistrationTest extends TestCase
     }
 
     public function testInvalidCharacters() {
-        // ?, *, /, - gibi karakterlerden oluşamaz (regex kullanılacak, valid username?)
+        // ?, *, /, - gibi karakterlerden oluşamaz (regex kullanılacak, valid username?) aZ_-025492
         $this->post('/api/register', ['nickname' => '?'])->assertResponseStatus(422);
         $this->post('/api/register', ['nickname' => '*'])->assertResponseStatus(422);
     }
