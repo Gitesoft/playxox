@@ -56,11 +56,11 @@ class Game extends Model
         $state[$row][$column] = $char;
 
         // is won?
-        if($this->isWon($this->state, $char)) {
+        if($this->isWon($state, $char)) {
             $this->winner = $player->getPlayerId();
         }
 
-        if($this->isOver($this->state)) {
+        if($this->isOver($state)) {
             $this->winner = '-';
         }
 
