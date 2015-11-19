@@ -32,15 +32,10 @@ class MatchMake extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channels = [];
-
-        if($this->player1->id) {
-            $channels[] = 'private-'.$this->player1->id;
-        }
-
-        if($this->player2->id) {
-            $channels[] = 'private-'.$this->player2->id;
-        }
+        $channels = [
+            'private-'.$this->player1->getPlayerId(),
+            'private-'.$this->player2->getPlayerId()
+        ];
 
         return $channels;
     }
