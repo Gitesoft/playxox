@@ -3,6 +3,7 @@
     <head>
         <title>XOX</title>
         <link rel="stylesheet" type="text/css" href="{{ elixir('vendor.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ elixir('css/all.css') }}">
     </head>
     <body ng-app="xox">
 

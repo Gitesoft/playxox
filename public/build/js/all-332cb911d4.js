@@ -10,6 +10,9 @@ xox.config(function ($routeProvider) {
     }).when('/lobby', {
         templateUrl: 'templates/lobby.html',
         controller: 'LobbyCtrl'
+    }).when('/game/:gameid', {
+        templateUrl: 'templates/game.html',
+        controller: 'GameCtrl'
     }).otherwise({
         templateUrl: 'templates/landing.html',
         controller: 'LandingCtrl'
@@ -24,6 +27,23 @@ xox.config(function ($routeProvider) {
     });
 }]);
 ;
+xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', function ($scope, locker, $location, $routeParams) {
+
+    //login check
+    if (locker.get('token') === undefined) {
+        $location.path('/lobby');
+    }
+
+    $scope.nickname = locker.get('nickname');
+    $scope.gameid = $routeParams.gameid;
+
+    $scope.game = [[null, null, null], [null, null, null], [null, null, null]];
+
+    $scope.move = function (i, j) {
+        console.log(i + ':' + j);
+        $scope.game[i][j] = 'X';
+    };
+}]);
 xox.controller('LandingCtrl', ['$scope', 'locker', '$location', function ($scope, locker, $location) {
 
     if (locker.get('token') !== undefined) {

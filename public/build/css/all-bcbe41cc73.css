@@ -1,0 +1,11 @@
+table.gametable td {
+    border: 1px solid #000000;
+}
+
+table.gametable td {
+    width: 200px;
+    height: 200px;
+    font-size: 150px;
+    text-align: center;
+    vertical-align: middle ;
+}
