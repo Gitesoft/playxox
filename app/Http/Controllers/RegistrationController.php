@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,7 +26,8 @@ class RegistrationController extends ApiController
         $user->nickname = $request->get('nickname');
 
         $location = GeoIP::getLocation();
-        $user->country = $location['country'].'/'.$location['isoCode'];
+        $countryId = Country::where('code',$location['isoCode'])->first()->id;
+        $user->country_id = $countryId;
         $user->ip_address =$location['ip'];
         $user->save();
 
