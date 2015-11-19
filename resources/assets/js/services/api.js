@@ -21,6 +21,15 @@
                 this.socket = io(XoxConfig.url + ':3000', {query: "user_id=" + this.me.id});
         }
 
+        this.destroySocket = function () {
+
+            if (this.socket !== null) {
+                this.socket.disconnect();
+                this.socket = null;
+            }
+
+        }
+
         var _execute = function (method, options) {
 
             var config = {
