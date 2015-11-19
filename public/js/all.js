@@ -1,6 +1,6 @@
 'use strict';
 
-var xox = angular.module('xox', ['ngRoute']);
+var xox = angular.module('xox', ['ngRoute', 'angular-locker']);
 
 // configure our routes
 xox.config(function ($routeProvider) {

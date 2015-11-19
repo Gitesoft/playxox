@@ -33,8 +33,9 @@ elixir(function (mix) {
   	.scripts([
 	    bowerPath + 'angular/angular.js',
       bowerPath + 'angular-route/angular-route.js',
-	    bowerPath + 'angular-socket-io/socket.js'
-
+	    bowerPath + 'angular-socket-io/socket.js',
+      bowerPath + 'angular-locker/dist/angular-locker.js'
+      //
 	  ], 'public/vendor.js')
 
 	.version([
