@@ -27,7 +27,7 @@ class RegistrationController extends Controller
 
                 $user = new User;
                 $user->nickname = $request->get('nickname');
-                $user->country = $location['country'];
+                $user->country = $location['country'].'/'.$location['isoCode'];
                 $user->ip_address =$location['ip'];
                 $user->save();
 
