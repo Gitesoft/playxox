@@ -60,6 +60,10 @@ class Game extends Model
             $this->winner = $player->getPlayerId();
         }
 
+        if($this->isOver($this->state)) {
+            $this->winner = '-';
+        }
+
         $this->state = $state;
 
         $players = $this->players;
@@ -124,6 +128,19 @@ class Game extends Model
         }
 
         return false;
+    }
+
+    public function isOver($state) {
+
+        foreach($state as $row) {
+            foreach($row as $column) {
+                if(is_null($column)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public function setStateAttribute(array $state) {
