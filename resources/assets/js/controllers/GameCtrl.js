@@ -10,16 +10,21 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
         $scope.gameid = $routeParams.gameid;
         $scope.char = 'X';
         $scope.turn = false;
-
-        console.log('here');
-
+        $scope.me = null;
+        $scope.opponent = null;
         $scope.updateGame = function (game) {
             $scope.game = game.state;
 
-            if (game.players[0].id == api.me.id)
+            if (game.players[0].id == api.me.id) {
                 $scope.char = game.players[0].char;
-            else
+                $scope.me = game.players[0];
+                $scope.opponent = game.players[1];
+            }
+            else {
                 $scope.char = game.players[1].char;
+                $scope.me = game.players[1];
+                $scope.opponent = game.players[0];
+            }
 
             if (game.turn == api.me.id)
                 $scope.turn = true;
@@ -28,6 +33,10 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
         };
 
         $scope.move = function (i, j) {
+
+            if ($scope.turn === false) {
+                return;
+            }
             if ($scope.game[i][j] === null) {
                 $scope.game[i][j] = angular.copy($scope.char);
             }
@@ -51,8 +60,6 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
 
             api.get(options).success(success).error(error);
         };
-
-        console.log('here2');
 
         $scope.updateGame(api.game);
 
