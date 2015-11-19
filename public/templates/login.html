@@ -7,3 +7,11 @@
         </button>
       </span>
 </div>
+
+<div class="alert alert-danger" ng-if="errors !== null" style="margin-top: 10px;">
+    <div ng-repeat="(field,error) in errors">
+        <p ng-repeat="err in error">
+            <strong>{{field}}</strong> : {{err}}
+        </p>
+    </div>
+</div>
