@@ -94,39 +94,68 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
     //login check
     if (api.me === undefined) {
         $location.path('/login');
+    } else if (api.game === null) {
+        $location.path('/lobby');
+    } else {
+
+        $scope.gameid = $routeParams.gameid;
+        $scope.char = 'X';
+        $scope.turn = false;
+        $scope.me = null;
+        $scope.opponent = null;
+        $scope.updateGame = function (game) {
+            $scope.game = game.state;
+
+            if (game.players[0].id == api.me.id) {
+                $scope.char = game.players[0].char;
+                $scope.me = game.players[0];
+                $scope.opponent = game.players[1];
+            } else {
+                $scope.char = game.players[1].char;
+                $scope.me = game.players[1];
+                $scope.opponent = game.players[0];
+            }
+
+            if (game.turn == api.me.id) $scope.turn = true;else $scope.turn = false;
+        };
+
+        $scope.move = function (i, j) {
+
+            if ($scope.turn === false) {
+                return;
+            }
+            if ($scope.game[i][j] === null) {
+                $scope.game[i][j] = angular.copy($scope.char);
+            }
+
+            var success = function success(response) {
+                console.log('move ok');
+            };
+
+            var error = function error(response) {
+                console.log('move not ok');
+            };
+
+            var target = i + ',' + j;
+            var options = {
+                'url': 'game/' + $scope.game.id + '/move',
+                'params': {
+                    token: api.me.token,
+                    target: target
+                }
+            };
+
+            api.get(options).success(success).error(error);
+        };
+
+        $scope.updateGame(api.game);
+
+        api.socket.on("game-" + api.game.id, function (data) {
+            $scope.updateGame(data);
+        });
     }
-
-    $scope.nickname = locker.get('nickname');
-    $scope.gameid = $routeParams.gameid;
-    $scope.char = 'X';
-    $scope.turn = false;
-
-    //$scope.game = [
-    //    [null, null, null],
-    //    [null, null, null],
-    //    [null, null, null],
-    //];
-
-    $scope.updateGame = function () {
-        $scope.game = api.game.state;
-
-        if (api.game.players[0].id == api.me.id) $scope.char = api.game.players[0].char;else $scope.char = api.game.players[1].char;
-
-        if (api.game.turn == api.me.id) $scope.turn = true;else $scope.turn = false;
-    };
-
-    $scope.move = function (i, j) {
-        if ($scope.game[i][j] === null) {
-            $scope.game[i][j] = angular.copy($scope.char);
-        }
-    };
-
-    $scope.updateGame();
-    $scope.$watch(function () {
-        return api.game;
-    }, function () {});
 }]);
-xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
+xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', '$timeout', function ($scope, locker, $location, api, $timeout) {
 
     if (api.me === undefined) {
         $location.path('/login');
@@ -135,48 +164,10 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
     api.gameListenChannel = 'private-' + api.me.id;
 
     $scope.joinLobby = function (type) {
-        api.createSocket();
-        api.socket.emit('joinlobby', {
-            id: api.me.id,
-            type: type
-        });
-
-        api.joinLobby();
-
-        //
-        //var dummyGame = {
-        //    "id": "34431", // game-id
-        //    "players": [
-        //        {
-        //            //id: "3", // user-id
-        //            id: api.me.id,
-        //            char: "X",
-        //            nickname: "aozisik"
-        //        },
-        //        {
-        //            id: "5", // user-id
-        //            char: "O",
-        //            nickname: "ilterocal"
-        //        }
-        //    ],
-        //    turn: "3", // user-id
-        //    state: [
-        //        [null, null, "O"],
-        //        [null, null, "O"],
-        //        ["X", "X", null]
-        //    ],
-        //    winner: null // veya kazanan kullanıcının id'si
-        //};
-        //
-        //$scope.startGame(dummyGame);
+        api.joinLobby(type);
     };
 
     $scope.quitLobby = function () {
-        api.createSocket();
-        api.socket.emit('quitlobby', {
-            id: api.me.id
-        });
-
         api.quitLobby();
     };
 
@@ -193,7 +184,7 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
     $scope.$on('startgame', function (event, game) {
         console.log('startgame event fired, go to: ' + '/game/' + game.id);
-        $scope.$apply(function () {
+        $timeout(function () {
             $location.path('/game/' + game.id);
         });
     });
@@ -241,7 +232,6 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         this.me = locker.get('me');
 
-        this.inLobby = false;
         this.game = null;
         this.gameListenChannel = null;
 
@@ -263,17 +253,27 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         //END SOCKET STUFF
 
-        this.joinLobby = function () {
-            self.inLobby = true;
+        //LOBBY MANAGEMENT
+        this.joinLobby = function (type) {
+            self.socket.emit('joinlobby', {
+                id: self.me.id,
+                type: type
+            });
+
             self.socket.on(self.gameListenChannel, function (data) {
                 self.updateGame(data);
+                //WHen game starts,quit from lobby and stop listening the lobby
+                self.quitLobby();
             });
         };
 
         this.quitLobby = function () {
-            self.inLobby = false;
+            self.socket.emit('quitlobby', {
+                id: self.me.id
+            });
             self.socket.removeAllListeners(self.gameListenChannel);
         };
+        //END LOBBY MANAGEMENT
 
         var _execute = function _execute(method, options) {
 

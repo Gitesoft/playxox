@@ -1,9 +1,23 @@
-<h1>Game: {{gameid}}</h1>
+<div class="text-center">
+    <h1>Game: {{gameid}}</h1>
 
-<div class="gametable">
+    <h1>{{me.nickname}} vs {{opponent.nickname}}</h1>
+</div>
+
+<div class="gametable clearfix">
     <div ng-repeat="row in game track by $index">
         <div class="gamecell col-xs-4" ng-repeat="col in row track by $index" ng-click="move($parent.$index,$index);">
             {{col}}
         </div>
     </div>
+</div>
+<div style="margin-top: 20px;" class="clearfix">
+    <button class="btn btn-block" ng-class="turn ? 'btn-success' : 'btn-warning'">
+        {{ turn ? 'Your turn, make your move' : 'Waiting for opponent\'s move'}}
+    </button>
+
+    <br>
+    <button class="btn btn-block btn-danger">
+        Back to Lobby
+    </button>
 </div>
