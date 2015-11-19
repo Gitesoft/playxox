@@ -25,7 +25,7 @@ class RegistrationController extends ApiController
         $user->nickname = $request->get('nickname');
 
         $location = GeoIP::getLocation();
-        $user->country = $location['country'];
+        $user->country = $location['country'].'/'.$location['isoCode'];
         $user->ip_address =$location['ip'];
         $user->save();
 
