@@ -1,25 +1,20 @@
 <div class="clearfix">
-    <h1 class="pull-left">Lobby</h1>
+    <h1 class="pull-left">Play XOX</h1>
 
     <h1 class="pull-right">
-        <button class="btn btn-danger" ng-click="doLogout();">Logout</button>
+        <button class="btn btn-danger" ng-click="doLogout();">Logout ({{api.me.nickname}})</button>
     </h1>
 </div>
 
-<h2>Play XOX</h2>
+<h2>Lobby</h2>
 <div class="row">
-    <div class="col-xs-4">
-        <button class="btn btn-success btn-block" ng-click="joinLobby('cpu');">vs. CPU</button>
-    </div>
-    <div class="col-xs-4">
-        <button class="btn btn-primary btn-block" ng-click="joinLobby('random');">vs. Random Player</button>
-    </div>
-    <div class="col-xs-4">
-        <button class="btn btn-success btn-block" ng-click="alert('Coming soog');">vs. Friend</button>
-    </div>
+    <!--<div class="col-xs-4">-->
+        <!--<button class="btn btn-success btn-block" ng-click="joinLobby('cpu');">vs. CPU</button>-->
+    <!--</div>-->
+    <div class="col-xs-12">
+        <button class="btn btn-primary btn-block" ng-click="joinLobby('random');">Play vs. Random Player</button>
+    <!--</div>-->
+    <!--<div class="col-xs-4">-->
+        <!--<button class="btn btn-success btn-block" ng-click="">vs. Friend</button>-->
+    <!--</div>-->
 </div>
-
-<br>
-<br>
-
-<a href="/#/game/123" class="btn btn-primary btn-block">Game Test</a>

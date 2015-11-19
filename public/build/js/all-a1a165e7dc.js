@@ -89,6 +89,180 @@ xox.config(function ($routeProvider) {
         });
     };
 });
+xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'api', '$timeout', function ($scope, locker, $location, $routeParams, api, $timeout) {
+
+    //login check
+    if (api.me === undefined) {
+        $location.path('/login');
+    } else if (api.game === null) {
+        $location.path('/lobby');
+    } else {
+
+        $scope.gameid = $routeParams.gameid;
+        $scope.char = 'X';
+        $scope.turn = false;
+        $scope.me = null;
+        $scope.opponent = null;
+        $scope.winner = null;
+        $scope.updateGame = function (game) {
+            console.log(game);
+            $scope.game = game.state;
+
+            var keys = Object.keys(game.players);
+
+            var p1 = keys[0];
+            var p2 = keys[1];
+
+            if (game.players[p1].id == api.me.id) {
+                $scope.char = game.players[p1].char;
+                $scope.me = game.players[p1];
+                $scope.opponent = game.players[p2];
+            } else {
+                $scope.char = game.players[p2].char;
+                $scope.me = game.players[p2];
+                $scope.opponent = game.players[p1];
+            }
+
+            if (game.turn == api.me.id) $scope.turn = true;else $scope.turn = false;
+
+            $scope.winner = game.winner;
+        };
+
+        $scope.move = function (i, j) {
+
+            if ($scope.turn === false || $scope.winner !== null) {
+                return;
+            }
+
+            if ($scope.game[i][j] === null) {
+                $scope.game[i][j] = angular.copy($scope.char);
+            }
+
+            var success = function success(response) {
+                console.log('move ok');
+            };
+
+            var error = function error(response) {
+                console.log('move not ok');
+            };
+
+            var target = i + ',' + j;
+            var options = {
+                'url': 'game/' + api.game.id + '/move',
+                'params': {
+                    token: api.me.token,
+                    target: target
+                }
+            };
+
+            api.get(options).success(success).error(error);
+        };
+
+        $scope.updateGame(api.game);
+
+        api.socket.on("game-" + api.game.id, function (data) {
+            $timeout(function () {
+                $scope.updateGame(data);
+            });
+        });
+
+        $scope.getWinnerClass = function () {
+            if ($scope.winner === null) {
+                return 'btn-default';
+            } else if ($scope.winner === '-') {
+                return 'btn-warning';
+            } else if ($scope.winner == $scope.me.id) {
+                return 'btn-success';
+            } else {
+                return 'btn-danger';
+            }
+        };
+
+        $scope.getWinner = function () {
+            if ($scope.winner === null) {
+                return 'btn-default';
+            } else if ($scope.winner === '-') {
+                return 'It is a draw!';
+            } else if ($scope.winner == $scope.me.id) {
+                return 'You won !';
+            } else {
+                return 'You lost :(';
+            }
+        };
+
+        $scope.backToLobby = function () {
+            $location.path('/lobby');
+        };
+    }
+}]);
+xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', '$timeout', function ($scope, locker, $location, api, $timeout) {
+
+    if (api.me === undefined) {
+        $location.path('/login');
+    } else {
+
+        $scope.api = api;
+
+        api.gameListenChannel = 'private-' + api.me.id;
+
+        $scope.joinLobby = function (type) {
+            api.joinLobby(type);
+        };
+
+        $scope.quitLobby = function () {
+            api.quitLobby();
+        };
+
+        $scope.doLogout = function () {
+            $scope.quitLobby();
+
+            //wipe local storage
+            locker.pull('me');
+            api.me = undefined;
+
+            //redirect to home
+            $location.path('');
+        };
+
+        $scope.$on('startgame', function (event, game) {
+            console.log('startgame event fired, go to: ' + '/game/' + game.id);
+            $timeout(function () {
+                $location.path('/game/' + game.id);
+            });
+        });
+    }
+}]);
+xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
+
+    if (locker.get('token') !== undefined) {
+        $location.path('/lobby');
+    }
+
+    $scope.nickname = "";
+    $scope.errors = null;
+
+    $scope.doLogin = function () {
+
+        var success = function success(response) {
+            $scope.errors = null;
+            api.me = response;
+            locker.put('me', response);
+            $location.path('/lobby');
+        };
+
+        var error = function error(response) {
+            $scope.errors = response;
+        };
+
+        var options = {
+            'url': 'register',
+            'data': {
+                nickname: $scope.nickname
+            }
+        };
+        api.post(options).success(success).error(error);
+    };
+}]);
 (function () {
 
     'use strict';
@@ -190,171 +364,3 @@ xox.config(function ($routeProvider) {
         };
     }]);
 })();
-xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'api', '$timeout', function ($scope, locker, $location, $routeParams, api, $timeout) {
-
-    //login check
-    if (api.me === undefined) {
-        $location.path('/login');
-    } else if (api.game === null) {
-        $location.path('/lobby');
-    } else {
-
-        $scope.gameid = $routeParams.gameid;
-        $scope.char = 'X';
-        $scope.turn = false;
-        $scope.me = null;
-        $scope.opponent = null;
-        $scope.winner = null;
-        $scope.updateGame = function (game) {
-            console.log(game);
-            $scope.game = game.state;
-
-            var keys = Object.keys(game.players);
-
-            var p1 = keys[0];
-            var p2 = keys[1];
-
-            if (game.players[p1].id == api.me.id) {
-                $scope.char = game.players[p1].char;
-                $scope.me = game.players[p1];
-                $scope.opponent = game.players[p2];
-            } else {
-                $scope.char = game.players[p2].char;
-                $scope.me = game.players[p2];
-                $scope.opponent = game.players[p1];
-            }
-
-            if (game.turn == api.me.id) $scope.turn = true;else $scope.turn = false;
-
-            $scope.winner = game.winner;
-        };
-
-        $scope.move = function (i, j) {
-
-            if ($scope.turn === false || $scope.winner !== null) {
-                return;
-            }
-
-            if ($scope.game[i][j] === null) {
-                $scope.game[i][j] = angular.copy($scope.char);
-            }
-
-            var success = function success(response) {
-                console.log('move ok');
-            };
-
-            var error = function error(response) {
-                console.log('move not ok');
-            };
-
-            var target = i + ',' + j;
-            var options = {
-                'url': 'game/' + api.game.id + '/move',
-                'params': {
-                    token: api.me.token,
-                    target: target
-                }
-            };
-
-            api.get(options).success(success).error(error);
-        };
-
-        $scope.updateGame(api.game);
-
-        api.socket.on("game-" + api.game.id, function (data) {
-            $timeout(function () {
-                $scope.updateGame(data);
-            });
-        });
-
-        $scope.getWinnerClass = function () {
-            if ($scope.winner === null) {
-                return 'btn-default';
-            } else if ($scope.winner === '-') {
-                return 'btn-warning';
-            } else if ($scope.winner == $scope.me.id) {
-                return 'btn-success';
-            } else {
-                return 'btn-danger';
-            }
-        };
-
-        $scope.getWinner = function () {
-            if ($scope.winner === null) {
-                return 'btn-default';
-            } else if ($scope.winner === '-') {
-                return 'It is a draw!';
-            } else if ($scope.winner == $scope.me.id) {
-                return 'You won !';
-            } else {
-                return 'You lost :(';
-            }
-        };
-    }
-}]);
-xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', '$timeout', function ($scope, locker, $location, api, $timeout) {
-
-    if (api.me === undefined) {
-        $location.path('/login');
-    } else {
-
-        api.gameListenChannel = 'private-' + api.me.id;
-
-        $scope.joinLobby = function (type) {
-            api.joinLobby(type);
-        };
-
-        $scope.quitLobby = function () {
-            api.quitLobby();
-        };
-
-        $scope.doLogout = function () {
-            $scope.quitLobby();
-
-            //wipe local storage
-            locker.pull('me');
-            api.me = undefined;
-
-            //redirect to home
-            $location.path('');
-        };
-
-        $scope.$on('startgame', function (event, game) {
-            console.log('startgame event fired, go to: ' + '/game/' + game.id);
-            $timeout(function () {
-                $location.path('/game/' + game.id);
-            });
-        });
-    }
-}]);
-xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
-
-    if (locker.get('token') !== undefined) {
-        $location.path('/lobby');
-    }
-
-    $scope.nickname = "";
-    $scope.errors = null;
-
-    $scope.doLogin = function () {
-
-        var success = function success(response) {
-            $scope.errors = null;
-            api.me = response;
-            locker.put('me', response);
-            $location.path('/lobby');
-        };
-
-        var error = function error(response) {
-            $scope.errors = response;
-        };
-
-        var options = {
-            'url': 'register',
-            'data': {
-                nickname: $scope.nickname
-            }
-        };
-        api.post(options).success(success).error(error);
-    };
-}]);

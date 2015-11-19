@@ -108,5 +108,10 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
                 return 'You lost :(';
             }
         }
+
+
+        $scope.backToLobby = function () {
+            $location.path('/lobby');
+        }
     }
 }]);
