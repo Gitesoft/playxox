@@ -149,7 +149,7 @@ return [
          * Third-Party Service Providers...
          */
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-
+        Torann\GeoIP\GeoIPServiceProvider::class,
     ],
 
     /*
@@ -202,6 +202,7 @@ return [
          * Third Party Facades
          */
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
 
     ],
 
