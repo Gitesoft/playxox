@@ -4,7 +4,7 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         $location.path('/login');
     }
 
-    $scope.gameListenChannel = 'private-' + api.me.id;
+    api.gameListenChannel = 'private-' + api.me.id;
 
     $scope.joinLobby = function (type) {
         api.createSocket();
@@ -13,33 +13,34 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
             type: type
         });
 
-        var dummyGame = {
-            "id": "34431", // game-id
-            "players": [
-                {
-                    //id: "3", // user-id
-                    id: api.me.id,
-                    char: "X",
-                    nickname: "aozisik"
-                },
-                {
-                    id: "5", // user-id
-                    char: "O",
-                    nickname: "ilterocal"
-                }
-            ],
-            turn: "3", // user-id
-            state: [
-                [null, null, "O"],
-                [null, null, "O"],
-                ["X", "X", null]
-            ],
-            winner: null // veya kazanan kullanıcının id'si
-        };
+        //
+        //var dummyGame = {
+        //    "id": "34431", // game-id
+        //    "players": [
+        //        {
+        //            //id: "3", // user-id
+        //            id: api.me.id,
+        //            char: "X",
+        //            nickname: "aozisik"
+        //        },
+        //        {
+        //            id: "5", // user-id
+        //            char: "O",
+        //            nickname: "ilterocal"
+        //        }
+        //    ],
+        //    turn: "3", // user-id
+        //    state: [
+        //        [null, null, "O"],
+        //        [null, null, "O"],
+        //        ["X", "X", null]
+        //    ],
+        //    winner: null // veya kazanan kullanıcının id'si
+        //};
+        //
+        //$scope.startGame(dummyGame);
 
-        $scope.startGame(dummyGame);
-
-        api.socket.on($scope.gameListenChannel, function (data) {
+        api.socket.on(api.gameListenChannel, function (data) {
             console.log(data);
             $scope.startGame(data);
         });

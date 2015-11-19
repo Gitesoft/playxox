@@ -10,6 +10,7 @@ use App\Events\MatchMake;
 
 use App\User;
 use Redis;
+use Log;
 
 class MatchMaker extends Command
 {
@@ -113,6 +114,7 @@ class MatchMaker extends Command
                 } catch(\Exception $e) {
                     // failed?
                     $this->error('Failed to matchmake');
+                    Log::error($e);
                 }
             }
             //

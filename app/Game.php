@@ -30,6 +30,6 @@ class Game extends Model
     }
 
     public function setStateAttribute(array $state) {
-        $this->attributes['state'] = json_decode($state);
+        $this->attributes['state'] = json_encode($state);
     }
 }
