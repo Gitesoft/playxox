@@ -38,7 +38,7 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
 
     $scope.updateGame();
     $scope.$watch(function () {
-
+        return api.game
         },
         function () {
 

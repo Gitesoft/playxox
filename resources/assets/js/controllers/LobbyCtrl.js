@@ -13,6 +13,8 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
             type: type
         });
 
+        api.joinLobby();
+
         //
         //var dummyGame = {
         //    "id": "34431", // game-id
@@ -39,11 +41,6 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         //};
         //
         //$scope.startGame(dummyGame);
-
-        api.socket.on(api.gameListenChannel, function (data) {
-            console.log(data);
-            $scope.startGame(data);
-        });
     };
 
     $scope.quitLobby = function () {
@@ -52,7 +49,7 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
             id: api.me.id
         });
 
-        api.socket.removeAllListeners($scope.gameListenChannel);
+        api.quitLobby();
     };
 
     $scope.doLogout = function () {
@@ -65,9 +62,4 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         //redirect to home
         $location.path('');
     };
-
-    $scope.startGame = function (game) {
-        api.game = game;
-        $location.path('/game/' + game.id);
-    }
 }]);
