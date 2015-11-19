@@ -1,11 +1,12 @@
-table.gametable td {
+.gametable {
     border: 1px solid #000000;
 }
 
-table.gametable td {
-    width: 200px;
+.gamecell {
+    border: 1px solid #000000;
     height: 200px;
     font-size: 150px;
     text-align: center;
-    vertical-align: middle ;
+    vertical-align: middle;
+    cursor: pointer;
 }

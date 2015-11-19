@@ -7,6 +7,7 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', fun
 
     $scope.nickname = locker.get('nickname');
     $scope.gameid = $routeParams.gameid;
+    $scope.char = 'X';
 
     $scope.game = [
         [null, null, null],
@@ -15,7 +16,8 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', fun
     ];
 
     $scope.move = function (i, j) {
-        console.log(i + ':' + j);
-        $scope.game[i][j] = 'X';
+        if ($scope.game[i][j] === null) {
+            $scope.game[i][j] = angular.copy($scope.char);
+        }
     }
 }]);
