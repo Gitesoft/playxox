@@ -6,6 +6,7 @@ use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\GameEngine\PlayerInterface;
+use App\Game;
 
 class MatchMake extends Event implements ShouldBroadcast
 {
@@ -13,6 +14,8 @@ class MatchMake extends Event implements ShouldBroadcast
 
     private $player1;
     private $player2;
+
+    private $game;
 
     /**
      * Create a new event instance.
@@ -23,6 +26,12 @@ class MatchMake extends Event implements ShouldBroadcast
     {
         $this->player1 = $player1;
         $this->player2 = $player2;
+
+        $this->game = Game::createGame($this->player1, $this->player2);
+    }
+
+    public function broadcastWith() {
+        return $this->game;
     }
 
     /**
