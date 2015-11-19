@@ -12,8 +12,12 @@
     </div>
 </div>
 <div style="margin-top: 20px;" class="clearfix">
-    <button class="btn btn-block" ng-class="turn ? 'btn-success' : 'btn-warning'">
+    <button class="btn btn-block" ng-class="turn ? 'btn-success' : 'btn-warning'" ng-if="winner === null">
         {{ turn ? 'Your turn, make your move' : 'Waiting for opponent\'s move'}}
+    </button>
+
+    <button class="btn btn-block" ng-class="getWinnerClass()" ng-if="winner !== null">
+        {{getWinner()}}
     </button>
 
     <br>
