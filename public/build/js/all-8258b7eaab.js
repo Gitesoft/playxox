@@ -288,7 +288,7 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         this.createSocket = function () {
             if (self.socket === null) {
-                self.socket = io(XoxConfig.url + ':3000');
+                self.socket = io(XoxConfig.url + ':' + XoxConfig.port);
             }
         };
 
