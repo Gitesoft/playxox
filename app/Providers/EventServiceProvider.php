@@ -31,8 +31,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
-        Score::created(function ($score) {
-            DB::table('users')->whereId($score->winnerId)->increment('total_score',1);
-        });
+
     }
 }
