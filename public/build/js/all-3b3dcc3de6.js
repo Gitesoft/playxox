@@ -117,12 +117,21 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
     $scope.joinLobby = function (type) {
         api.createSocket();
         api.socket.emit('joinlobby', {
+            id: api.me.id,
             type: type
         });
     };
 
+    $scope.quitLobby = function () {
+        api.createSocket();
+        api.socket.emit('quitlobby', {
+            id: api.me.id
+        });
+    };
+
     $scope.doLogout = function () {
-        api.destroySocket();
+        $scope.quitLobby();
+
         //wipe local storage
         locker.pull('me');
         api.me = undefined;
@@ -181,16 +190,12 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
         this.socket = null;
 
         this.createSocket = function () {
-            if (this.socket === null) this.socket = io(XoxConfig.url + ':3000', { query: "user_id=" + this.me.id });
-        };
-
-        this.destroySocket = function () {
-
-            if (this.socket !== null) {
-                this.socket.disconnect();
-                this.socket = null;
+            if (this.socket === null) {
+                this.socket = io(XoxConfig.url + ':3000');
             }
         };
+
+        this.createSocket();
 
         var _execute = function _execute(method, options) {
 

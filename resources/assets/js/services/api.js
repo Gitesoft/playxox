@@ -17,18 +17,12 @@
         this.socket = null;
 
         this.createSocket = function () {
-            if (this.socket === null)
-                this.socket = io(XoxConfig.url + ':3000', {query: "user_id=" + this.me.id});
-        }
-
-        this.destroySocket = function () {
-
-            if (this.socket !== null) {
-                this.socket.disconnect();
-                this.socket = null;
+            if (this.socket === null) {
+                this.socket = io(XoxConfig.url + ':3000');
             }
+        };
 
-        }
+        this.createSocket();
 
         var _execute = function (method, options) {
 

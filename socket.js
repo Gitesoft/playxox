@@ -23,7 +23,6 @@ var addUserToLobby = function (user) {
 };
 
 var removeUserFromLobby = function (user) {
-    console.log(lobby);
     delete lobby[user.id];
     redis.set('lobby', JSON.stringify(lobby));
 }
@@ -42,30 +41,26 @@ redisSubscribe.on('pmessage', function (subscribed, channel, payload) {
 });
 
 io.on('connection', function (socket) {
+    var user_id = null;
 
-    var handshakeData = socket.request;
-    var user_id = handshakeData._query['user_id'];
+    console.log("connected");
 
-    console.log('new connection | from user:' + user_id);
-
-    socket.on('joinlobby', function (data) {
-
-        if (user_id === undefined)
-            return;
-
-        console.log('joined to lobby | user:' + user_id + ',type:' + data.type);
-
-        var user = {
-            id: user_id,
-            type: data.type
-        };
+    socket.on('joinlobby', function (user) {
+        user_id = user.id;
+        console.log('joined to lobby | user:' + user.id + ',type:' + user.type);
         addUserToLobby(user);
+        //printLobby();
+    });
 
+    socket.on('quitlobby', function (user) {
+        console.log('leaving lobby | user:' + user.id + ',type:' + user.type);
+        removeUserFromLobby(user);
         //printLobby();
     });
 
     socket.on('disconnect', function () {
-        removeUserFromLobby({id: user_id});
+        if (user_id !== null)
+            removeUserFromLobby({id: user_id});
 
         //printLobby();
 

@@ -7,12 +7,21 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
     $scope.joinLobby = function (type) {
         api.createSocket();
         api.socket.emit('joinlobby', {
+            id: api.me.id,
             type: type
         });
-    }
+    };
+
+    $scope.quitLobby = function () {
+        api.createSocket();
+        api.socket.emit('quitlobby', {
+            id: api.me.id
+        });
+    };
 
     $scope.doLogout = function () {
-        api.destroySocket();
+        $scope.quitLobby();
+
         //wipe local storage
         locker.pull('me');
         api.me = undefined;
