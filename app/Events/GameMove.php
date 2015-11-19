@@ -5,23 +5,27 @@ namespace App\Events;
 use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Game;
 
 class GameMove extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 
-    public $id;
-    public $message;
+    public $game;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Game $game)
     {
         //
-        $this->id = 'f3495h34h39';
-        $this->message = 'hello world';
+        $this->game = $game;
+    }
+
+    public function broadcastWith() {
+        return $this->game->toArray();
     }
 
     /**
@@ -31,6 +35,6 @@ class GameMove extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['game-'.$this->id];
+        return ['game-'.$this->game->id];
     }
 }

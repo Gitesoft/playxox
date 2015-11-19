@@ -27,5 +27,6 @@ class GameStateListener
     public function handle(GameMove $event)
     {
         //
+
     }
 }

@@ -18,7 +18,7 @@ class EventServiceProvider extends ServiceProvider
 
         ],
         'App\Events\GameMove' => [
-            'App\Listeners\GameStateListener',
+            'App\Listeners\GameStateListener'
         ],
     ];
 
