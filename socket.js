@@ -68,5 +68,5 @@ io.on('connection', function (socket) {
     });
 });
 
-console.log("Listening on port 3000");
-server.listen(3000);
+console.log("Listening on port 8888");
+server.listen(8888);

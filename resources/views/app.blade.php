@@ -18,7 +18,8 @@
         <script type="text/javascript" src="{{ elixir('vendor.js') }}"></script>
         <script>
             var XoxConfig = {
-              url: "{{ url() }}"
+                url: "{{ url() }}",
+                port: 8888
             };
         </script>
         <script type="text/javascript" src="{{ elixir('js/all.js') }}"></script>
