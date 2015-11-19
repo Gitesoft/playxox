@@ -11,4 +11,5 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){});
 });
 
+console.log("Listening on port 3000");
 server.listen(3000);
