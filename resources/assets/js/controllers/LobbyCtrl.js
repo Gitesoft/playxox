@@ -2,33 +2,34 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', '$timeout',
 
     if (api.me === undefined) {
         $location.path('/login');
-    }
+    } else {
 
-    api.gameListenChannel = 'private-' + api.me.id;
+        api.gameListenChannel = 'private-' + api.me.id;
 
-    $scope.joinLobby = function (type) {
-        api.joinLobby(type);
-    };
+        $scope.joinLobby = function (type) {
+            api.joinLobby(type);
+        };
 
-    $scope.quitLobby = function () {
-        api.quitLobby();
-    };
+        $scope.quitLobby = function () {
+            api.quitLobby();
+        };
 
-    $scope.doLogout = function () {
-        $scope.quitLobby();
+        $scope.doLogout = function () {
+            $scope.quitLobby();
 
-        //wipe local storage
-        locker.pull('me');
-        api.me = undefined;
+            //wipe local storage
+            locker.pull('me');
+            api.me = undefined;
 
-        //redirect to home
-        $location.path('');
-    };
+            //redirect to home
+            $location.path('');
+        };
 
-    $scope.$on('startgame', function (event, game) {
-        console.log('startgame event fired, go to: ' + '/game/' + game.id);
-        $timeout(function () {
-            $location.path('/game/' + game.id);
+        $scope.$on('startgame', function (event, game) {
+            console.log('startgame event fired, go to: ' + '/game/' + game.id);
+            $timeout(function () {
+                $location.path('/game/' + game.id);
+            });
         });
-    });
+    }
 }]);

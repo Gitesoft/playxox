@@ -1,4 +1,4 @@
-xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'api', function ($scope, locker, $location, $routeParams, api) {
+xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'api', '$timeout', function ($scope, locker, $location, $routeParams, api, $timeout) {
 
     //login check
     if (api.me === undefined) {
@@ -14,6 +14,7 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
         $scope.opponent = null;
         $scope.winner = null;
         $scope.updateGame = function (game) {
+            console.log(game);
             $scope.game = game.state;
 
             var keys = Object.keys(game.players);
@@ -72,11 +73,10 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
 
         $scope.updateGame(api.game);
 
-        console.log("game-" + api.game.id);
         api.socket.on("game-" + api.game.id, function (data) {
-            console.log("event fired");
-            console.log(data);
-            $scope.updateGame(data);
+            $timeout(function () {
+                $scope.updateGame(data);
+            });
         });
 
         $scope.getWinnerClass = function () {
