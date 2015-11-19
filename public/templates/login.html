@@ -1,9 +1,17 @@
 <h1>Enter Nickname</h1>
 <div class="input-group">
-    <input type="text" class="form-control" ng-model="nickname">
+    <input type="text" class="form-control" ng-model="nickname" ng-enter="doLogin();">
       <span class="input-group-btn">
         <button class="btn btn-primary" ng-click="doLogin()">
             Login
         </button>
       </span>
+</div>
+
+<div class="alert alert-danger" ng-if="errors !== null" style="margin-top: 10px;">
+    <div ng-repeat="(field,error) in errors">
+        <p ng-repeat="err in error">
+            <strong>{{field}}</strong> : {{err}}
+        </p>
+    </div>
 </div>

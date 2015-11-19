@@ -137,19 +137,13 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
     }
 
     $scope.nickname = "";
-    $scope.errors = null;
 
     $scope.doLogin = function () {
 
         var success = function success(response) {
-            $scope.errors = null;
             api.me = response;
             locker.put('me', response);
             $location.path('/lobby');
-        };
-
-        var error = function error(response) {
-            $scope.errors = response;
         };
 
         var options = {
@@ -158,7 +152,7 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
                 nickname: $scope.nickname
             }
         };
-        api.post(options).success(success).error(error);
+        api.post(options).success(success);
     };
 }]);
 (function () {

@@ -50,17 +50,27 @@ class User extends Model implements AuthenticatableContract,
     protected $appends = ['token'];
 
     //
+    public function getTokenAttribute() {
+        return JWTAuth::fromUser($this);
+    }
 
 
     public function takeTurn(Game $game) {
 
     }
 
+    /**
+     * Playerable Interface
+     */
     public function makeMove(Game $game) {
 
     }
 
-    public function getTokenAttribute() {
-        return JWTAuth::fromUser($this);
+    public function getPlayerId() {
+        return $this->id;
+    }
+
+    public function getPlayerNick() {
+        return $this->nickname;
     }
 }
