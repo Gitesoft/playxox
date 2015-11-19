@@ -14,11 +14,7 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
-        foreach (range(1, 10) as $index) {
-            factory(App\User::class, 50)->create()->each(function($u) {
-                $u->posts()->save(factory(App\Post::class)->make());
-            });
-        }
+        factory(App\User::class, 50)->create();
     }
 
 
