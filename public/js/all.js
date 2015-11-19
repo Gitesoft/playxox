@@ -99,14 +99,30 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
     $scope.nickname = locker.get('nickname');
     $scope.gameid = $routeParams.gameid;
     $scope.char = 'X';
+    $scope.turn = false;
 
-    $scope.game = [[null, null, null], [null, null, null], [null, null, null]];
+    //$scope.game = [
+    //    [null, null, null],
+    //    [null, null, null],
+    //    [null, null, null],
+    //];
+
+    $scope.updateGame = function () {
+        $scope.game = api.game.state;
+
+        if (api.game.players[0].id == api.me.id) $scope.char = api.game.players[0].char;else $scope.char = api.game.players[1].char;
+
+        if (api.game.turn == api.me.id) $scope.turn = true;else $scope.turn = false;
+    };
 
     $scope.move = function (i, j) {
         if ($scope.game[i][j] === null) {
             $scope.game[i][j] = angular.copy($scope.char);
         }
     };
+
+    $scope.updateGame();
+    $scope.$watch(function () {}, function () {});
 }]);
 xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
 
@@ -114,11 +130,45 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         $location.path('/login');
     }
 
+    api.gameListenChannel = 'private-' + api.me.id;
+
     $scope.joinLobby = function (type) {
         api.createSocket();
         api.socket.emit('joinlobby', {
             id: api.me.id,
             type: type
+        });
+
+        //
+        //var dummyGame = {
+        //    "id": "34431", // game-id
+        //    "players": [
+        //        {
+        //            //id: "3", // user-id
+        //            id: api.me.id,
+        //            char: "X",
+        //            nickname: "aozisik"
+        //        },
+        //        {
+        //            id: "5", // user-id
+        //            char: "O",
+        //            nickname: "ilterocal"
+        //        }
+        //    ],
+        //    turn: "3", // user-id
+        //    state: [
+        //        [null, null, "O"],
+        //        [null, null, "O"],
+        //        ["X", "X", null]
+        //    ],
+        //    winner: null // veya kazanan kullanıcının id'si
+        //};
+        //
+        //$scope.startGame(dummyGame);
+
+        api.socket.on(api.gameListenChannel, function (data) {
+            console.log(data);
+            $scope.startGame(data);
         });
     };
 
@@ -127,6 +177,8 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         api.socket.emit('quitlobby', {
             id: api.me.id
         });
+
+        api.socket.removeAllListeners($scope.gameListenChannel);
     };
 
     $scope.doLogout = function () {
@@ -138,6 +190,11 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         //redirect to home
         $location.path('');
+    };
+
+    $scope.startGame = function (game) {
+        api.game = game;
+        $location.path('/game/' + game.id);
     };
 }]);
 xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {

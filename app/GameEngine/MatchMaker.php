@@ -10,6 +10,7 @@ use App\Events\MatchMake;
 
 use App\User;
 use Redis;
+use Log;
 
 class MatchMaker extends Command
 {
@@ -77,6 +78,8 @@ class MatchMaker extends Command
 
         $user1 = User::find($player['id']);
         $user2 = User::find($opponent['id']);
+        // remove user from lobby
+        $this->lobby->forget($opponent['id']);
 
         $this->matchMake($user1, $user2);
         return true;
@@ -103,9 +106,15 @@ class MatchMaker extends Command
                 $type = $this->gameTypes[$player['type']];
 
                 // if match succeeds
-                if($this->$type($player)) {
-                    // remove user from the lobby
-                    $this->lobby->forget($key);
+                try {
+                    if($this->$type($player)) {
+                        // remove user from the lobby
+                        $this->lobby->forget($key);
+                    }
+                } catch(\Exception $e) {
+                    // failed?
+                    $this->error('Failed to matchmake');
+                    Log::error($e);
                 }
             }
             //

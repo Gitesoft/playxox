@@ -13,5 +13,4 @@ class Score extends Model
     private $winnerId;
     private $timestamp;
 
-
 }
