@@ -6,6 +6,46 @@
 + Random -> Player vs. Random Player
 + Friend -> Player vs. Player
 
+## Data Structures and Events
+
+### Client -> Server
+
+**joinLobby**
+
+	{
+		type: "random" // other options: computer, friend
+	}
+
+
+### Server -> Client
+
+**joinGame**
+
+	{
+		"id": "34431", // game-id
+		"players": [
+			{
+				id: "3", // user-id
+				char: "X",
+				nickname: "aozisik"
+			},
+			{
+				id: "5", // user-id
+				char: "O",
+				nickname: "ilterocal"
+			}			
+		],
+		turn: "3", // user-id
+		state: [
+			[null, null, "O"],
+			[null, null, "O"],
+			["X", "X", null]
+		],
+		winner: null // veya kazanan kullanıcının id'si
+	}
+
+
+
 
 ## Components
 
