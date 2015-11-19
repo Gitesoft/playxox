@@ -18,6 +18,8 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api'], function () {
     Route::post('register', 'RegistrationController@register');
     Route::post('login', 'RegistrationController@login');
+    Route::get('scores/top_players', 'ScoresController@topPlayers');
+    Route::get('scores/top_countries', 'ScoresController@topCountries');
 });
 
 Route::get('/socket', function () {

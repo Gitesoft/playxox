@@ -15,6 +15,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'nickname' => $faker->userName,
         'ip_address' => $faker->ipv4,
-        'country' => $faker->country.'/'.$faker->countryCode
+        'country_id' => random_int(1,240)
+    ];
+});
+
+
+$factory->define(App\Country::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->country,
+        'code' => $faker->countryCode
     ];
 });
