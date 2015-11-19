@@ -71,10 +71,10 @@ class User extends Model implements AuthenticatableContract,
     }
 
     public function getPlayerId() {
-        return $this->id;
+        return $this->attributes['id'];
     }
 
     public function getPlayerNick() {
-        return $this->nickname;
+        return $this->attributes['nickname'];
     }
 }
