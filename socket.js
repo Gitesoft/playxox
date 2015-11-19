@@ -53,7 +53,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('quitlobby', function (user) {
-        console.log('leaving lobby | user:' + user.id + ',type:' + user.type);
+        console.log('leaving lobby | user:' + user.id);
         removeUserFromLobby(user);
         //printLobby();
     });

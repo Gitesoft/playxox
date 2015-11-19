@@ -4,25 +4,50 @@
 
     var xox = angular.module('xox');
 
-    xox.service('api', ['$rootScope', '$http', 'locker', function ($rootScope, $http, locker) {
+    xox.service('api', ['$rootScope', '$http', 'locker', '$location', function ($rootScope, $http, locker, $location) {
 
         var self = this;
 
         this.me = locker.get('me');
 
-        this.broadcast = function (event, args) {
-            $rootScope.$broadcast(event, args);
+        this.inLobby = false;
+        this.game = null;
+        this.gameListenChannel = null;
+
+        this.updateGame = function (game) {
+
+            if (self.game === null)
+                $location.path('/game/' + game.id);
+
+            self.game = game;
         };
 
+        //SOCKET STUFF
         this.socket = null;
 
         this.createSocket = function () {
-            if (this.socket === null) {
-                this.socket = io(XoxConfig.url + ':3000');
+            if (self.socket === null) {
+                self.socket = io(XoxConfig.url + ':3000');
             }
         };
 
         this.createSocket();
+
+        //END SOCKET STUFF
+
+        this.joinLobby = function () {
+            self.inLobby = true;
+            self.socket.on(self.gameListenChannel, function (data) {
+                console.log(data);
+                self.updateGame(data);
+            });
+        };
+
+        this.quitLobby = function () {
+            self.inLobby = false;
+            self.socket.removeAllListeners(self.gameListenChannel);
+        }
+
 
         var _execute = function (method, options) {
 
@@ -64,6 +89,11 @@
         this.delete = function (options) {
             return _execute('DELETE', options);
         };
+
+        this.broadcast = function (event, args) {
+            $rootScope.$broadcast(event, args);
+        };
+
 
     }]);
 
