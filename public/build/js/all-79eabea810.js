@@ -122,9 +122,7 @@ xox.controller('GameCtrl', ['$scope', 'locker', '$location', '$routeParams', 'ap
     };
 
     $scope.updateGame();
-    $scope.$watch(function () {
-        return api.game;
-    }, function () {});
+    $scope.$watch(function () {}, function () {});
 }]);
 xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
 
@@ -140,8 +138,6 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
             id: api.me.id,
             type: type
         });
-
-        api.joinLobby();
 
         //
         //var dummyGame = {
@@ -169,6 +165,11 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
         //};
         //
         //$scope.startGame(dummyGame);
+
+        api.socket.on(api.gameListenChannel, function (data) {
+            console.log(data);
+            $scope.startGame(data);
+        });
     };
 
     $scope.quitLobby = function () {
@@ -177,7 +178,7 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
             id: api.me.id
         });
 
-        api.quitLobby();
+        api.socket.removeAllListeners($scope.gameListenChannel);
     };
 
     $scope.doLogout = function () {
@@ -189,6 +190,11 @@ xox.controller('LobbyCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         //redirect to home
         $location.path('');
+    };
+
+    $scope.startGame = function (game) {
+        api.game = game;
+        $location.path('/game/' + game.id);
     };
 }]);
 xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($scope, locker, $location, api) {
@@ -228,48 +234,25 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
     var xox = angular.module('xox');
 
-    xox.service('api', ['$rootScope', '$http', 'locker', '$location', function ($rootScope, $http, locker, $location) {
+    xox.service('api', ['$rootScope', '$http', 'locker', function ($rootScope, $http, locker) {
 
         var self = this;
 
         this.me = locker.get('me');
 
-        this.inLobby = false;
-        this.game = null;
-        this.gameListenChannel = null;
-
-        this.updateGame = function (game) {
-
-            if (self.game === null) $location.path('/game/' + game.id);
-
-            self.game = game;
+        this.broadcast = function (event, args) {
+            $rootScope.$broadcast(event, args);
         };
 
-        //SOCKET STUFF
         this.socket = null;
 
         this.createSocket = function () {
-            if (self.socket === null) {
-                self.socket = io(XoxConfig.url + ':3000');
+            if (this.socket === null) {
+                this.socket = io(XoxConfig.url + ':3000');
             }
         };
 
         this.createSocket();
-
-        //END SOCKET STUFF
-
-        this.joinLobby = function () {
-            self.inLobby = true;
-            self.socket.on(self.gameListenChannel, function (data) {
-                console.log(data);
-                self.updateGame(data);
-            });
-        };
-
-        this.quitLobby = function () {
-            self.inLobby = false;
-            self.socket.removeAllListeners(self.gameListenChannel);
-        };
 
         var _execute = function _execute(method, options) {
 
@@ -310,10 +293,6 @@ xox.controller('LoginCtrl', ['$scope', 'locker', '$location', 'api', function ($
 
         this['delete'] = function (options) {
             return _execute('DELETE', options);
-        };
-
-        this.broadcast = function (event, args) {
-            $rootScope.$broadcast(event, args);
         };
     }]);
 })();
