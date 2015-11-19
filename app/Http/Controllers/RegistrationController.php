@@ -19,6 +19,7 @@ class RegistrationController extends Controller
     {
         $user = User::where('nickname', $request->get('nickname'))->first();
         if($user->exists()) {
+            
             return json_encode($user);
         } else {
             return Response::json('{"error": "This nickname is already used."}', 422);

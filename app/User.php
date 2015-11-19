@@ -50,17 +50,6 @@ class User extends Model implements AuthenticatableContract,
 
 
 
-    public function register(Request $request)
-    {
-        //
-    }
-
-
-    public function login(Request $request)
-    {
-        //
-    }
-
 
     public function takeTurn(Game $game) {
 
