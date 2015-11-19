@@ -10,7 +10,6 @@
 
         this.me = locker.get('me');
 
-        this.inLobby = false;
         this.game = null;
         this.gameListenChannel = null;
 
@@ -32,17 +31,28 @@
 
         //END SOCKET STUFF
 
-        this.joinLobby = function () {
-            self.inLobby = true;
+
+        //LOBBY MANAGEMENT
+        this.joinLobby = function (type) {
+            self.socket.emit('joinlobby', {
+                id: self.me.id,
+                type: type
+            });
+
             self.socket.on(self.gameListenChannel, function (data) {
                 self.updateGame(data);
+                //WHen game starts,quit from lobby and stop listening the lobby
+                self.quitLobby();
             });
         };
 
         this.quitLobby = function () {
-            self.inLobby = false;
+            self.socket.emit('quitlobby', {
+                id: self.me.id
+            });
             self.socket.removeAllListeners(self.gameListenChannel);
-        }
+        };
+        //END LOBBY MANAGEMENT
 
 
         var _execute = function (method, options) {
