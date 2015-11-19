@@ -1,1 +1,0 @@
-"use strict";var xox=angular.module("xox",[]);

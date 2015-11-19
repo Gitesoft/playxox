@@ -22,16 +22,17 @@ elixir(function (mix) {
   	.copy('vendor/bower_components/bootstrap/dist/fonts', 'public/fonts')
   	.copy('vendor/bower_components/font-awesome/fonts', 'public/fonts')
 
-	.babel('app.js')
+  	.babel('**/*.js')
   	//
   	.styles([
-  		bowerPath + 'bootstrap/dist/css/bootstrap.css',
+  		bowerPath + 'bootstrap/dist/css/bootstrap.min.css',
   		bowerPath + 'font-awesome/css/font-awesome.css'
   		//
   	], 'public/vendor.css')
   	//
   	.scripts([
 	    bowerPath + 'angular/angular.js',
+      bowerPath + 'angular-route/angular-route.js',
 	    bowerPath + 'angular-socket-io/socket.js'
 
 	  ], 'public/vendor.js')
@@ -39,6 +40,6 @@ elixir(function (mix) {
 	.version([
 	  'vendor.css',
 	  'vendor.js',
-	  'js/app.js'
+	  'js/all.js'
 	]);
 });
