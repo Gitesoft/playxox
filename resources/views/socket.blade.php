@@ -14,8 +14,12 @@
 <script type="text/javascript" src="{{ elixir('vendor.js') }}"></script>
 <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
 <script>
-    var socket = io('http://xox.game:3000');
+    // Don't put this! This is already declared in app.blade.php in views folder
+    var XoxConfig = {
+        url: "{{ url() }}"
+    };
 
+    var socket = io(XoxConfig.url + '3000');
 
     socket.on('game-f3495h34h39', function(payload) {
         console.log(payload);
