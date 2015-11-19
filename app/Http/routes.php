@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('/socket', function() {
+Route::group(['prefix' => 'api'], function () {
+    Route::post('register', 'RegistrationController@register');
+    Route::post('login', 'RegistrationController@login');
+});
+
+Route::get('/socket', function () {
     return view('socket');
 });
