@@ -25,4 +25,5 @@ $factory->define(App\Country::class, function (Faker\Generator $faker) {
         'name' => $faker->country,
         'code' => $faker->countryCode
     ];
+    
 });
