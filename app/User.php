@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use App\GameEngine\PlayerInterface;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -18,6 +17,12 @@ class User extends Model implements AuthenticatableContract,
                                     PlayerInterface
 {
     use Authenticatable, Authorizable, CanResetPassword;
+
+    private $id;
+    private $nickname;
+    private $ip_address;
+    private $country;
+    private $timestamp;
 
     /**
      * The database table used by the model.
@@ -31,7 +36,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['nickname', 'country'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -41,6 +46,22 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     //
+
+
+
+
+    public function register(Request $request)
+    {
+        //
+    }
+
+
+    public function login(Request $request)
+    {
+        //
+    }
+
+
     public function takeTurn(Game $game) {
 
     }

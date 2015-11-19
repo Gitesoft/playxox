@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('app');
 });
+
+
+Route::group(['prefix'=> 'api'], function() {
+    Route::post('register','RegistrationController@register');
+    Route::post('login','RegistrationController@login');
+});
