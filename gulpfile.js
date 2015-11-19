@@ -14,33 +14,34 @@ elixir.config.sourcemaps = false;
  */
 
 elixir(function (mix) {
-  //mix.sass('app.scss');
-  //
-  var bowerPath = '../../../vendor/bower_components/';
 
-  mix
-  	.copy('vendor/bower_components/bootstrap/dist/fonts', 'public/fonts')
-  	.copy('vendor/bower_components/font-awesome/fonts', 'public/fonts')
+    var bowerPath = '../../../vendor/bower_components/';
 
-  	.babel('**/*.js')
-  	//
-  	.styles([
-  		bowerPath + 'bootstrap/dist/css/bootstrap.min.css',
-  		bowerPath + 'font-awesome/css/font-awesome.css'
-  		//
-  	], 'public/vendor.css')
-  	//
-  	.scripts([
-	    bowerPath + 'angular/angular.js',
-      bowerPath + 'angular-route/angular-route.js',
-	    bowerPath + 'angular-socket-io/socket.js',
-      bowerPath + 'angular-locker/dist/angular-locker.js'
-      //
-	  ], 'public/vendor.js')
+    mix
+        .copy('vendor/bower_components/bootstrap/dist/fonts', 'public/fonts')
+        .copy('vendor/bower_components/font-awesome/fonts', 'public/fonts')
 
-	.version([
-	  'vendor.css',
-	  'vendor.js',
-	  'js/all.js'
-	]);
+        .babel('**/*.js')
+        //
+        .styles([
+            bowerPath + 'bootstrap/dist/css/bootstrap.min.css',
+            bowerPath + 'font-awesome/css/font-awesome.css'
+            //
+        ], 'public/vendor.css')
+        .styles(['app.css'])
+        //
+        .scripts([
+            bowerPath + 'angular/angular.js',
+            bowerPath + 'angular-route/angular-route.js',
+            bowerPath + 'angular-socket-io/socket.js',
+            bowerPath + 'angular-locker/dist/angular-locker.js'
+            //
+        ], 'public/vendor.js')
+
+        .version([
+            'vendor.css',
+            'vendor.js',
+            'js/all.js',
+            'css/all.css'
+        ]);
 });

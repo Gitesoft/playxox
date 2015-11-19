@@ -13,8 +13,11 @@ xox.
                 templateUrl: 'templates/lobby.html',
                 controller: 'LobbyCtrl'
             })
-            .
-            otherwise({
+            .when('/game/:gameid', {
+                templateUrl: 'templates/game.html',
+                controller: 'GameCtrl'
+            })
+            .otherwise({
                 templateUrl: 'templates/landing.html',
                 controller: 'LandingCtrl'
             })

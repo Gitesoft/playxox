@@ -1,0 +1,9 @@
+<h1>Game: {{gameid}}</h1>
+
+<table class="gametable">
+    <tr ng-repeat="row in game track by $index">
+        <td ng-repeat="col in row track by $index" ng-click="move($parent.$index,$index);">
+            {{col}}
+        </td>
+    </tr>
+</table>
