@@ -70,7 +70,7 @@ class Game extends Model
         $this->save();
     }
 
-    private function checkColums(array $columns, $char) {
+    public function checkColums(array $columns, $char) {
         $equal = true;
         $prev = null;
 
@@ -90,7 +90,7 @@ class Game extends Model
         return $equal;
     }
 
-    private function isWon(array $state, $char) {
+    public function isWon(array $state, $char) {
 
         // check columns horizontally
         foreach($state as $row) {
