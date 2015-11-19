@@ -31,7 +31,7 @@ class MatchMake extends Event implements ShouldBroadcast
     }
 
     public function broadcastWith() {
-        return $this->game;
+        return $this->game->toArray();
     }
 
     /**
