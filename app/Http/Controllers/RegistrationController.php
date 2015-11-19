@@ -39,7 +39,7 @@ class RegistrationController extends ApiController
         $user = User::where('nickname', $request->get('nickname'))->first();
         if (!empty($user)) {
 
-            return json_encode($user);
+            return response()->json($user);
         } else {
             return response()->json(['error' => 'User not found'], 404);
         }
