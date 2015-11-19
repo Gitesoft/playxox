@@ -10,13 +10,13 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
+use App\Country;
 use JWTAuth;
 
 class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract,
-                                    PlayerInterface
+    AuthorizableContract,
+    CanResetPasswordContract,
+    PlayerInterface
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
@@ -52,15 +52,23 @@ class User extends Model implements AuthenticatableContract,
     //
 
 
-    public function takeTurn(Game $game) {
+    public function takeTurn(Game $game)
+    {
 
     }
 
-    public function makeMove(Game $game) {
+    public function makeMove(Game $game)
+    {
 
     }
 
-    public function getTokenAttribute() {
+    public function getTokenAttribute()
+    {
         return JWTAuth::fromUser($this);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }
